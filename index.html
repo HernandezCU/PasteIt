@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+
+  @font-face { font-family: Moon; src: url('Moon.otf'); }
+
+  button[type=div_button]{
+
+    font-family: Moon,monospace;
+    border-radius: 0px 0px 20px 20px;
+    border: 5px solid #875053;
+    outline: 0;
+    padding: 12px;
+    color: #FFFFFF;
+    background-color: #875053;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 20px;
+
+  }
+
+  div{
+
+    font-family: Moon,monospace;
+    box-shadow: 0 4px 32px 0 rgba(33, 0, 0, 0.5);
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+    border-radius: 20px;
+
+  }
+
+  input[type=text], select {
+
+    font-family: Moon,monospace;
+    width: 75%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+
+  }
+
+  label{
+
+    font-size: 25px;
+
+  }
+
+  h1{
+
+    font-size: 35px;
+
+  }
+
+  button{
+
+    font-family: Moon;
+    width: 250px;
+    height: 60px;
+    border-radius: 10px;
+    border: 5px solid #FFFFFF;
+    background-color: #875053;
+    color: white;
+    font-size: 18px;
+
+  }
+
+
+</style>
+<script>
+  function display_elements(id, action)
+  {
+
+    let x = document.getElementById(id);
+
+    if (action === "log_in")
+    {
+      x.style.display = "block";
+    }
+    else if (action === "sign_up")
+    {
+      x.style.display = "block";
+    }
+    x = document.getElementById("actions");
+    x.style.display = "none";
+  }
+
+</script>
+
+<div id="sign_in" style="display:none;">
+  <br>
+  <h1>Sign in</h1><br>
+  <label>Email: </label><br>
+  <input type="text" id="sign_in_email_input"><br><br>
+  <label>Password: </label><br>
+  <input type="text" id="sign_in_password_input"><br><br>
+  <button type="div_button" onclick="location.href = 'home.html';">Sign In</button>
+
+</div>
+
+<br><br>
+
+<div id="sign_up" style="display:none;">
+  <br>
+  <h1>Register</h1><br>
+  <label>Email: </label><br>
+  <input type="text" id="register_email_input"><br><br>
+  <label>Password: </label><br>
+  <input type="text" id="register_password_input"><br><br>
+  <button type="div_button" onclick="location.href = 'home.html';">Register</button>
+
+</div>
+
+
+<div id="actions">
+  <br>
+  <h1 style="font-size: 50px;">Welcome</h1><br>
+
+  <button onclick="display_elements('sign_in', 'log_in')">Log In</button>
+  <button onclick="display_elements('sign_up', 'sign_up')">Register</button>
+  <br>
+  <br>
+
+
+</div>
+
+
+</html>

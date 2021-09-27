@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<style>
+@font-face { font-family: Moon; src: url('Moon.otf'); }
+
+
+body{
+
+    margin:0;
+    padding:0;
+
+}
+
+
+button[type=div_button]{
+
+    font-family: Moon,monospace;
+    border-radius: 0px 0px 20px 20px;
+    border: 5px solid #875053;
+    outline: 0;
+    padding: 12px;
+    color: #FFFFFF;
+    background-color: #875053;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 20px;
+
+}
+
+.content{
+
+    font-family: Moon,monospace;
+    box-shadow: 0 4px 32px 0 rgba(33, 0, 0, 0.5);
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+    border-radius: 20px;
+
+}
+
+input[type=text], select {
+
+    font-family: Moon,monospace;
+    width: 75%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+
+}
+
+textarea{
+    max-width: 75%;
+    max-height: 300px;
+    width: 75%;
+    height: 300px;
+    font-family: Moon,monospace;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+
+}
+
+
+label{
+
+    font-size: 25px;
+
+}
+
+h1{
+
+    font-size: 35px;
+
+}
+
+button{
+
+    font-family: Moon,monospace;
+    width: 250px;
+    height: 60px;
+    border-radius: 10px;
+    border: 5px solid #FFFFFF;
+    background-color: #875053;
+    color: white;
+    font-size: 18px;
+
+}
+
+.banner{
+    position: fixed;
+    font-family: Moon,monospace;
+    width: 100%;
+    height: 100px;
+    margin:0px;
+    padding:0px;
+    background-color: black;
+    vertical-align: top;
+}
+
+</style>
+
+
+<html lang="en">
+
+<div style="display: none;" class="banner">
+    <p style="color: white; text-align: center;">Banner</p>
+</div>
+
+
+<div class="content" id="new_paste" style="display: none;">
+    <br>
+    <h1>NEW PASTE</h1>
+    <label>Heading</label><br>
+    <input type="text" id="heading_create"><br><br>
+    <label>Body</label><br>
+    <textarea type="text" id="body_create"> </textarea><br><br>
+    <button type="div_button" onclick="submit_paste()">Submit Paste</button>
+
+</div>
+
+
+
+<div class="content" id="paste_code" style="display: none;">
+    <br>
+    <h1>Enter Paste Code</h1>
+    <label>Enter Code:</label><br>
+    <input type="text" id="code_paste_id"><br><br>
+
+    <button type="div_button" onclick="access_paste()">Access Paste</button>
+
+</div>
+
+
+
+<div  class="content" id="paste_view" style="display: none;">
+    <br>
+
+    <h1 id="heading_view" >Heading</h1>
+    <p style="font-size: 30px;" id="content_view" >Body</p>
+    <label id="key_view">XX-XX-XX</label><br>
+    <button type="div_button" onclick="back_to_welcome('paste_view')">Back</button>
+
+</div>
+
+
+<div class="content" id="actions">
+    <br>
+    <h1 style="font-size: 50px;">Welcome</h1><br>
+
+    <button onclick="to_find_code()">Find a Paste</button>
+    <button onclick="to_create_paste()">Create a Paste</button>
+    <br>
+    <br>
+
+
+</div>
+
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+<script>
+
+
+    function to_find_code()
+    {
+        let p = document.getElementById("paste_code");
+        p.style.display = "block";
+        p = document.getElementById("actions");
+        p.style.display = "none";
+    }
+
+
+    function to_create_paste()
+    {
+        let p = document.getElementById("new_paste");
+        p.style.display = "block";
+        p = document.getElementById("actions");
+        p.style.display = "none";
+    }
+
+
+    function back_to_welcome(sender)
+    {
+        let p = document.getElementById(sender);
+        p.style.display = "none";
+        p = document.getElementById("actions");
+        p.style.display = "block";
+
+    }
+
+
+    function access_paste()
+    {
+        let o = document.getElementById("code_paste_id").value;
+        if (o === "")
+        {
+            alert("Paste Code Field is empty");
+
+        }else{
+
+            let address = "https://9dghkv.deta.dev/fetch_paste/paste?key=" + o;
+            let obj;
+            axios
+                .get(address)
+                .then(response => {
+
+                    obj = response.data;
+                    if (obj.heading !== undefined){
+
+                        display_paste(obj, "paste_code");
+
+                    }else{
+                        alert("Error Code: " + obj.code + "\n" + "Message: " + obj.message)
+                    }
+
+                })
+                .catch(error => console.error(error));
+
+        }
+    }
+
+    function display_paste(data, sender)
+    {
+        let s = document.getElementById(sender);
+        s.style.display = "none";
+
+        let d = document.getElementById("paste_view");
+        let h = document.getElementById("heading_view");
+        let b = document.getElementById("content_view");
+        let c = document.getElementById("key_view");
+
+        d.style.display = "block";
+        h.innerHTML = data.heading;
+        b.innerHTML = data.body;
+        c.innerHTML = data.key;
+
+    }
+
+    function submit_paste()
+    {
+        let a = document.getElementById("heading_create").value;
+        let b = document.getElementById("body_create").value;
+
+        let code;
+        axios
+            .get(encode_url(a,b))
+            .then(response => {
+                code = response.data;
+                alert("Paste Key: " + code.key);
+                back_to_welcome("new_paste");
+            })
+            .catch(error => console.error(error));
+
+
+    }
+
+    function encode_url(head_text_raw, body_text_raw) {
+        const encodeGetParams = p =>
+            Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&");
+
+        const params = {
+            heading: head_text_raw,
+            body: body_text_raw,
+        };
+
+        return ("https://9dghkv.deta.dev/create_paste/new?" + encodeGetParams(params))
+    }
+//First Test With Everything Set Up
+//Randooms Strinaogn098234-98bqawd0=d19238438124235tqewtf
+// https://www.google.com/search?q=rty456&oq=rty456&aqs=chrome..69i57.2544j0j7&sourceid=chrome&ie=UTF-8
+// https://www.google.com/search?q=rty456&oq=rty456&aqs=chrome..69i57.2544j0j7&sourceid=chrome&ie=UTF-8
+</script>
+
+
+
+</html>
