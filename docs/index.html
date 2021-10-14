@@ -148,8 +148,8 @@ button{
 
 </style>
 
-
 <html lang="en">
+
 <div class="container">
 
 
@@ -197,33 +197,27 @@ button{
 </div>
 
 </div>
+
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-
 <script>
-
 
     var count  = 0;
 
     function globes(){
-
         if (count <= 25){
             const container = document.querySelector('.container');
             const create = document.createElement("div");
             create.classList.add("globes");
             create.innerHTML = '<img src="clipboard.png">'
-            //create.innerHTML = "🌐";
-            //<img src="image.png" alt="Text to display when image can not be displayed">
             create.style.left = Math.random() * 100 + 'vw';
             create.style.animationDuration = Math.random() * 3 + 2 + 's';
             container.appendChild(create);
             count += 1
             console.log(count);
         }else{
-
             console.log("stopped spawning");
         }
-        //📋 🌐
     }
     setInterval(globes, 3000);
     globes();
@@ -262,7 +256,6 @@ button{
         if (o === "")
         {
             alert("Paste Code Field is empty");
-
         }else{
 
             let address = "https://9dghkv.deta.dev/fetch_paste/paste?key=" + o;
@@ -335,7 +328,5 @@ button{
     }
 
 </script>
-
-
 
 </html>
