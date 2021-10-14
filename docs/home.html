@@ -2,7 +2,45 @@
 
 <style>
 @font-face { font-family: Moon; src: url('Moon.otf'); }
+img{
+    height: 50%;
+    width: 50%;
+}
 
+.container{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: Moon, monospace;
+    background-color: #875053;
+}
+
+.globes{
+
+    z-index: 1;
+    font-size: 50px;
+    position: fixed;
+    top:-1vh;
+    left: 0;
+    transform: translateY(0%);
+    animation: fall 1s ease-in infinite;
+}
+
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+    }
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
 
 body{
 
@@ -13,9 +51,9 @@ body{
 
 
 button[type=div_button]{
-
+    z-index: 100;
     font-family: Moon,monospace;
-    border-radius: 0px 0px 20px 20px;
+    border-radius: 0 0 20px 20px;
     border: 5px solid #875053;
     outline: 0;
     padding: 12px;
@@ -29,18 +67,25 @@ button[type=div_button]{
 }
 
 .content{
-
+    z-index: 100;
+    background-color: #FFFFFF;
     font-family: Moon,monospace;
     box-shadow: 0 4px 32px 0 rgba(33, 0, 0, 0.5);
-    max-width: 600px;
+    width: 600px;
     margin: auto;
     text-align: center;
     border-radius: 20px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 
 }
 
 input[type=text], select {
 
+    z-index: 100;
+    background-color: #FFFFFF;
     font-family: Moon,monospace;
     width: 75%;
     padding: 12px 20px;
@@ -53,6 +98,8 @@ input[type=text], select {
 }
 
 textarea{
+    z-index: 100;
+    background-color: #FFFFFF;
     max-width: 75%;
     max-height: 300px;
     width: 75%;
@@ -70,18 +117,23 @@ textarea{
 
 label{
 
+    z-index: 100;
+    background-color: #FFFFFF;
     font-size: 25px;
 
 }
 
 h1{
 
+    z-index: 100;
+    background-color: #FFFFFF;
     font-size: 35px;
 
 }
 
 button{
 
+    z-index: 100;
     font-family: Moon,monospace;
     width: 250px;
     height: 60px;
@@ -93,25 +145,12 @@ button{
 
 }
 
-.banner{
-    position: fixed;
-    font-family: Moon,monospace;
-    width: 100%;
-    height: 100px;
-    margin:0px;
-    padding:0px;
-    background-color: black;
-    vertical-align: top;
-}
 
 </style>
 
 
 <html lang="en">
-
-<div style="display: none;" class="banner">
-    <p style="color: white; text-align: center;">Banner</p>
-</div>
+<div class="container">
 
 
 <div class="content" id="new_paste" style="display: none;">
@@ -122,33 +161,28 @@ button{
     <label>Body</label><br>
     <textarea type="text" id="body_create"> </textarea><br><br>
     <button type="div_button" onclick="submit_paste()">Submit Paste</button>
-
 </div>
-
-
 
 <div class="content" id="paste_code" style="display: none;">
     <br>
     <h1>Enter Paste Code</h1>
     <label>Enter Code:</label><br>
     <input type="text" id="code_paste_id"><br><br>
-
     <button type="div_button" onclick="access_paste()">Access Paste</button>
 
 </div>
 
-
-
 <div  class="content" id="paste_view" style="display: none;">
     <br>
-
     <h1 id="heading_view" >Heading</h1>
-    <p style="font-size: 30px;" id="content_view" >Body</p>
+    <br>
+    <p style="font-size: 30px; background-color: #FFFFFF;" id="content_view" >Body</p>
+    <br>
     <label id="key_view">XX-XX-XX</label><br>
+    <br>
+    <br>
     <button type="div_button" onclick="back_to_welcome('paste_view')">Back</button>
-
 </div>
-
 
 <div class="content" id="actions">
     <br>
@@ -162,11 +196,37 @@ button{
 
 </div>
 
-
+</div>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 
 <script>
+
+
+    var count  = 0;
+
+    function globes(){
+
+        if (count <= 25){
+            const container = document.querySelector('.container');
+            const create = document.createElement("div");
+            create.classList.add("globes");
+            create.innerHTML = '<img src="clipboard.png">'
+            //create.innerHTML = "🌐";
+            //<img src="image.png" alt="Text to display when image can not be displayed">
+            create.style.left = Math.random() * 100 + 'vw';
+            create.style.animationDuration = Math.random() * 3 + 2 + 's';
+            container.appendChild(create);
+            count += 1
+            console.log(count);
+        }else{
+
+            console.log("stopped spawning");
+        }
+        //📋 🌐
+    }
+    setInterval(globes, 3000);
+    globes();
 
 
     function to_find_code()
@@ -193,7 +253,6 @@ button{
         p.style.display = "none";
         p = document.getElementById("actions");
         p.style.display = "block";
-
     }
 
 
@@ -254,7 +313,8 @@ button{
             .get(encode_url(a,b))
             .then(response => {
                 code = response.data;
-                alert("Paste Key: " + code.key);
+                navigator.clipboard.writeText(code.key);
+                alert("Success!\nThe following paste key has been copied to your clipboard!\nPaste Key: " + code.key);
                 back_to_welcome("new_paste");
             })
             .catch(error => console.error(error));
